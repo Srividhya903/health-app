@@ -3,6 +3,8 @@
 import React, { useState } from "react";
 import { DoctorProfile } from "@/data/doctorsData";
 import { X, Calendar, Clock, Video, MapPin, CheckCircle2, ArrowRight } from "lucide-react";
+import { createClient } from "@/lib/supabase/client";
+import { saveUserAppointment } from "@/lib/supabase/db";
 
 interface BookingModalProps {
   doctor: DoctorProfile | null;
@@ -31,11 +33,31 @@ export default function BookingModal({ doctor, isOpen, onClose, onBookingSuccess
     "Stress & Sleep",
   ];
 
-  const handleConfirm = (e: React.FormEvent) => {
+  const handleConfirm = async (e: React.FormEvent) => {
     e.preventDefault();
     const ref = `AH-${Math.floor(1000 + Math.random() * 9000)}`;
     setBookingRef(ref);
     setIsConfirmed(true);
+
+    try {
+      const supabase = createClient();
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        await saveUserAppointment({
+          user_id: user.id,
+          doctor_name: doctor.name,
+          specialty: doctor.specialty,
+          appointment_date: activeDate,
+          appointment_time: activeSlot,
+          mode: consultMode === "Online" ? "HD Video Call" : `In-Person (${doctor.location})`,
+          booking_ref: ref,
+          notes: reason,
+        });
+      }
+    } catch (err) {
+      console.warn("Could not save appointment to DB:", err);
+    }
+
     onBookingSuccess?.({
       doctorName: doctor.name,
       date: activeDate,

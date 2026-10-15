@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { X, ArrowRight, Loader2, AlertCircle } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
+import { syncUserProfile } from "@/lib/supabase/db";
 
 interface LoginModalProps {
   isOpen: boolean;
@@ -65,7 +66,7 @@ export default function LoginModal({ isOpen, onClose, initialMode }: LoginModalP
       const supabase = createClient();
 
       if (mode === "login") {
-        const { error } = await supabase.auth.signInWithPassword({
+        const { data, error } = await supabase.auth.signInWithPassword({
           email,
           password,
         });
@@ -79,14 +80,17 @@ export default function LoginModal({ isOpen, onClose, initialMode }: LoginModalP
             setErrorMessage(error.message);
           }
         } else {
-          setSuccessMessage("Authenticated successfully.");
+          if (data.user) {
+            await syncUserProfile(data.user);
+          }
+          setSuccessMessage("Authenticated successfully! Connecting to your health record...");
           setTimeout(() => {
             onClose();
             window.location.href = "/dashboard";
-          }, 800);
+          }, 600);
         }
       } else {
-        const { error } = await supabase.auth.signUp({
+        const { data, error } = await supabase.auth.signUp({
           email,
           password,
           options: {
@@ -102,8 +106,18 @@ export default function LoginModal({ isOpen, onClose, initialMode }: LoginModalP
           } else {
             setErrorMessage(error.message);
           }
+        } else if (data.session && data.user) {
+          await syncUserProfile(data.user, name);
+          setSuccessMessage("Account created & connected to EHR! Redirecting to dashboard...");
+          setTimeout(() => {
+            onClose();
+            window.location.href = "/dashboard";
+          }, 800);
         } else {
-          setSuccessMessage("Account created. Check your email for confirmation or log in.");
+          if (data.user) {
+            await syncUserProfile(data.user, name);
+          }
+          setSuccessMessage("Account registered! Please check your email to confirm, or click Sign In.");
         }
       }
     } catch (err: unknown) {

@@ -8,8 +8,28 @@ export async function GET(request: Request) {
 
   if (code) {
     const supabase = await createClient();
-    const { error } = await supabase.auth.exchangeCodeForSession(code);
+    const { data, error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) {
+      if (data?.user) {
+        try {
+          await supabase.from("profiles").upsert(
+            {
+              id: data.user.id,
+              email: data.user.email,
+              full_name:
+                data.user.user_metadata?.full_name ||
+                data.user.user_metadata?.name ||
+                data.user.email?.split("@")[0],
+              avatar_url: data.user.user_metadata?.avatar_url || "",
+              updated_at: new Date().toISOString(),
+            },
+            { onConflict: "id" }
+          );
+        } catch {
+          // Continue redirect even if profiles table schema has not been executed yet
+        }
+      }
+
       const forwardedHost = request.headers.get("x-forwarded-host");
       const isLocalEnv = process.env.NODE_ENV === "development";
       if (isLocalEnv) {
