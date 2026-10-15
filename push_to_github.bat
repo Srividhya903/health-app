@@ -1,12 +1,16 @@
 @echo off
-echo ==============================================
-echo Pushing AuraHealth AI to GitHub: Srividhya903/health-app
-echo ==============================================
+echo ==============================================================
+echo Pushing Complete AuraHealth AI (with src/app) to GitHub
+echo Repository: https://github.com/Srividhya903/health-app
+echo ==============================================================
 echo.
-"C:\Program Files\Git\cmd\git.exe" push -u origin main
+"C:\Program Files\Git\cmd\git.exe" push -u origin main --force
 echo.
 if %ERRORLEVEL% EQU 0 (
-    echo [SUCCESS] All files pushed successfully to https://github.com/Srividhya903/health-app
+    echo ==============================================================
+    echo [SUCCESS] Complete project with src/app pushed to GitHub!
+    echo Vercel will now automatically rebuild and deploy successfully.
+    echo ==============================================================
 ) else (
     echo [NOTICE] If prompted by Git Credential Manager, please sign in with your browser.
 )
