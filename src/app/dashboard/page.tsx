@@ -470,7 +470,15 @@ CREATE POLICY "Users can insert own appointments" ON public.appointments FOR INS
             <p className="body-sm" style={{ marginBottom: "2.5rem" }}>
               Ask about biomarkers, nutrition, or symptoms — clinically validated responses only.
             </p>
-            <AIAssistantWidget />
+            <AIAssistantWidget
+              userName={displayName}
+              vitals={{
+                bp: manualBP,
+                glucose: manualGlucose,
+                weight: manualWeight,
+                score: healthScore,
+              }}
+            />
           </div>
         </div>
 
