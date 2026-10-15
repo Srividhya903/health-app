@@ -14,64 +14,25 @@ export default function Home() {
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const [authMode, setAuthMode] = useState<"login" | "register">("login");
 
-  const handleOpenLogin = () => {
-    setAuthMode("login");
-    setLoginModalOpen(true);
-  };
-
-  const handleOpenRegister = () => {
-    setAuthMode("register");
-    setLoginModalOpen(true);
-  };
+  const handleOpenLogin = () => { setAuthMode("login"); setLoginModalOpen(true); };
+  const handleOpenRegister = () => { setAuthMode("register"); setLoginModalOpen(true); };
 
   const handleExploreFeatures = () => {
-    const el = document.getElementById("features");
-    el?.scrollIntoView({ behavior: "smooth" });
-  };
-
-  const handleDoctorBooking = (doctorName: string) => {
-    // Smooth interaction confirmation
-    console.log(`Booking consultation with ${doctorName}`);
+    document.getElementById("features")?.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
-    <div className="min-h-screen bg-[#060911] text-slate-100 flex flex-col selection:bg-cyan-500 selection:text-white">
-      {/* Global Header Navigation */}
-      <Navbar
-        onOpenLogin={handleOpenLogin}
-        onOpenRegister={handleOpenRegister}
-      />
-
-      {/* Main Landing Page Content */}
-      <main className="flex-1">
-        {/* 1. Hero Section with AI-Powered Healthcare Ecosystem headline & Live Console */}
-        <HeroSection
-          onGetStarted={handleOpenRegister}
-          onExploreFeatures={handleExploreFeatures}
-        />
-
-        {/* 2. Value Proposition Cards */}
+    <div style={{ minHeight: "100vh", background: "#000", color: "#fff", display: "flex", flexDirection: "column" }}>
+      <Navbar onOpenLogin={handleOpenLogin} onOpenRegister={handleOpenRegister} />
+      <main style={{ flex: 1 }}>
+        <HeroSection onGetStarted={handleOpenRegister} onExploreFeatures={handleExploreFeatures} />
         <ValuePropositions />
-
-        {/* 3. AI Diet Planner Showcase */}
         <DietPlannerTeaser onPlanClick={handleOpenRegister} />
-
-        {/* 4. Doctors & Specialist Telehealth Showcase */}
-        <DoctorsTeaser onBookDoctor={handleDoctorBooking} />
-
-        {/* 5. Prominent Get Started Call-to-Action */}
+        <DoctorsTeaser onBookDoctor={() => {}} />
         <CTASection onGetStarted={handleOpenRegister} />
       </main>
-
-      {/* Global Footer */}
       <Footer onOpenLogin={handleOpenLogin} />
-
-      {/* Patient / Doctor Authentication Modal */}
-      <LoginModal
-        isOpen={loginModalOpen}
-        onClose={() => setLoginModalOpen(false)}
-        initialMode={authMode}
-      />
+      <LoginModal isOpen={loginModalOpen} onClose={() => setLoginModalOpen(false)} initialMode={authMode} />
     </div>
   );
 }

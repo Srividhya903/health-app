@@ -1,28 +1,17 @@
 "use client";
 
 import React, { useState } from "react";
-import DashboardHeader from "@/components/dashboard/DashboardHeader";
-import HealthScoreBanner from "@/components/dashboard/HealthScoreBanner";
+import Link from "next/link";
+import Footer from "@/components/Footer";
+import { ArrowLeft, CheckCircle2, X, Activity, Droplets, Scale, Heart, RefreshCw } from "lucide-react";
 import MetricCards from "@/components/dashboard/MetricCards";
 import AIAssistantWidget from "@/components/dashboard/AIAssistantWidget";
 import QuickScheduleAndMeds from "@/components/dashboard/QuickScheduleAndMeds";
-import Footer from "@/components/Footer";
-import {
-  Activity,
-  Calendar,
-  X,
-  CheckCircle2,
-  Heart,
-  Droplets,
-  Scale,
-} from "lucide-react";
 
 export default function DashboardPage() {
   const [logVitalsModalOpen, setLogVitalsModalOpen] = useState(false);
   const [scheduleModalOpen, setScheduleModalOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
-
-  // Form states for manual vitals modal
   const [manualBP, setManualBP] = useState("118/78");
   const [manualGlucose, setManualGlucose] = useState("92");
   const [manualWeight, setManualWeight] = useState("64.2");
@@ -35,179 +24,169 @@ export default function DashboardPage() {
   const handleSaveVitals = (e: React.FormEvent) => {
     e.preventDefault();
     setLogVitalsModalOpen(false);
-    showToast("Manual vitals logged and synced to encrypted patient EHR!");
+    showToast("Vitals logged and synced to encrypted EHR.");
   };
 
   return (
-    <div className="min-h-screen bg-[#050811] text-slate-100 flex flex-col selection:bg-cyan-500 selection:text-white">
-      {/* Dashboard Top Header */}
-      <DashboardHeader
-        userName="Jane Doe"
-        onRefreshData={() => showToast("IoT Biometric telemetry refreshed with Apple Watch & Oura.")}
-      />
+    <div style={{ minHeight: "100vh", background: "#000", color: "#fff", display: "flex", flexDirection: "column" }}>
+      {/* Sub-nav */}
+      <header style={{ borderBottom: "1px solid #1a1a1a", position: "sticky", top: 0, background: "#000", zIndex: 40 }}>
+        <div className="container-editorial" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", height: "3.5rem" }}>
+          <Link href="/" style={{ display: "flex", alignItems: "center", gap: "0.4rem", fontSize: "0.8125rem", color: "#707070", textDecoration: "none", fontWeight: 500 }} className="link-underline">
+            <ArrowLeft size={14} /> Home
+          </Link>
+          <span style={{ fontSize: "0.75rem", fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "#505050" }}>
+            Dashboard
+          </span>
+          <button
+            onClick={() => showToast("Biometrics refreshed from Apple Watch.")}
+            style={{ background: "none", border: "none", cursor: "pointer", color: "#505050", display: "flex", alignItems: "center", gap: "0.4rem", fontSize: "0.75rem" }}
+          >
+            <RefreshCw size={13} /> Refresh
+          </button>
+        </div>
+      </header>
 
-      {/* Main Dashboard Canvas */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-        {/* Toast Alert */}
-        {toastMessage && (
-          <div className="fixed bottom-6 right-6 z-50 p-4 rounded-2xl bg-emerald-950/95 border border-emerald-500/60 text-emerald-200 text-xs sm:text-sm font-semibold flex items-center gap-2.5 shadow-2xl animate-in slide-in-from-bottom-5">
-            <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
-            <span>{toastMessage}</span>
-          </div>
-        )}
+      {/* Toast */}
+      {toastMessage && (
+        <div className="toast-mono">
+          <CheckCircle2 size={16} />
+          {toastMessage}
+        </div>
+      )}
 
-        {/* 1. Welcome Greeting Banner with Health Score Summary */}
-        <HealthScoreBanner
-          userName="Jane"
-          onLogVitals={() => setLogVitalsModalOpen(true)}
-          onScheduleDoctor={() => setScheduleModalOpen(true)}
-        />
-
-        {/* 2. Interactive Visual Cards: Steps, Heart Rate, Sleep, Water */}
-        <MetricCards />
-
-        {/* 3. AI Health Assistant Chatbot Widget */}
-        <section id="ai-health-assistant">
-          <div className="mb-4">
-            <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-pulse" />
-              <span>AI Health Assistant &amp; Clinical Triage</span>
-            </h2>
-            <p className="text-xs text-slate-400 mt-0.5">
-              Ask questions about your daily biomarkers, nutrition balance, or symptoms
-            </p>
-          </div>
-          <AIAssistantWidget />
-        </section>
-
-        {/* 4. Upcoming Doctor Consultation & Daily Medications */}
-        <QuickScheduleAndMeds />
-      </main>
-
-      {/* Manual Vitals Modal */}
-      {logVitalsModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
-          <div className="relative w-full max-w-md bg-[#09101f] border border-cyan-500/30 rounded-3xl p-6 sm:p-8 shadow-2xl">
-            <button
-              onClick={() => setLogVitalsModalOpen(false)}
-              className="absolute top-5 right-5 p-1.5 text-slate-400 hover:text-white rounded-full hover:bg-slate-800"
-            >
-              <X className="w-5 h-5" />
-            </button>
-
-            <div className="flex items-center gap-3 mb-5">
-              <div className="p-2.5 rounded-xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/30">
-                <Activity className="w-6 h-6" />
-              </div>
+      <main style={{ flex: 1 }}>
+        {/* Welcome hero */}
+        <div style={{ borderBottom: "1px solid #1a1a1a", paddingTop: "4rem", paddingBottom: "4rem" }}>
+          <div className="container-editorial">
+            <p className="label-upper" style={{ marginBottom: "1rem" }}>Good morning</p>
+            <h1 className="display-lg" style={{ color: "#fff", marginBottom: "1.5rem" }}>
+              Jane.
+            </h1>
+            {/* Health score inline */}
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "3rem", alignItems: "flex-end" }}>
               <div>
-                <h3 className="text-lg font-bold text-white">Manual Vitals Entry</h3>
-                <p className="text-xs text-slate-400">Sync with medical EHR record</p>
+                <p className="label-upper" style={{ marginBottom: "0.5rem" }}>Health score</p>
+                <p style={{ fontSize: "4rem", fontWeight: 900, letterSpacing: "-0.05em", color: "#fff", lineHeight: 1 }}>
+                  87<span style={{ fontSize: "1.5rem", color: "#505050" }}>/100</span>
+                </p>
+              </div>
+              <div style={{ flex: 1, display: "flex", flexWrap: "wrap", gap: "2rem" }}>
+                {[
+                  { label: "Trend", value: "↑ +3 pts this week" },
+                  { label: "BMI", value: "22.4 · Normal" },
+                  { label: "Last sync", value: "Just now" },
+                ].map((s) => (
+                  <div key={s.label}>
+                    <p className="label-upper" style={{ marginBottom: "0.25rem" }}>{s.label}</p>
+                    <p style={{ fontSize: "0.9375rem", fontWeight: 600, color: "#a0a0a0" }}>{s.value}</p>
+                  </div>
+                ))}
               </div>
             </div>
+            <div style={{ display: "flex", gap: "0.75rem", marginTop: "2.5rem" }}>
+              <button onClick={() => setLogVitalsModalOpen(true)} className="btn-primary btn-sm">
+                Log vitals
+              </button>
+              <button onClick={() => setScheduleModalOpen(true)} className="btn-ghost btn-sm">
+                Book doctor
+              </button>
+            </div>
+          </div>
+        </div>
 
-            <form onSubmit={handleSaveVitals} className="space-y-4">
-              <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">
-                  Blood Pressure (Systolic / Diastolic)
-                </label>
-                <div className="relative">
-                  <Heart className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
-                  <input
-                    type="text"
-                    value={manualBP}
-                    onChange={(e) => setManualBP(e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-10 pr-4 py-2.5 text-sm text-white focus:outline-none focus:border-cyan-400"
-                  />
+        {/* Metric cards */}
+        <div style={{ borderBottom: "1px solid #1a1a1a" }}>
+          <div className="container-editorial" style={{ paddingTop: "3rem", paddingBottom: "3rem" }}>
+            <p className="label-upper" style={{ marginBottom: "2.5rem" }}>Today&apos;s biometrics</p>
+            <MetricCards />
+          </div>
+        </div>
+
+        {/* AI Assistant */}
+        <div style={{ borderBottom: "1px solid #1a1a1a" }}>
+          <div className="container-editorial" style={{ paddingTop: "3rem", paddingBottom: "3rem" }}>
+            <p className="label-upper" style={{ marginBottom: "0.75rem" }}>AI Health Assistant</p>
+            <p className="body-sm" style={{ marginBottom: "2.5rem" }}>
+              Ask about biomarkers, nutrition, or symptoms — clinically validated responses only.
+            </p>
+            <AIAssistantWidget />
+          </div>
+        </div>
+
+        {/* Schedule & meds */}
+        <div style={{ borderBottom: "1px solid #1a1a1a" }}>
+          <div className="container-editorial" style={{ paddingTop: "3rem", paddingBottom: "3rem" }}>
+            <QuickScheduleAndMeds />
+          </div>
+        </div>
+      </main>
+
+      {/* Log Vitals Modal */}
+      {logVitalsModalOpen && (
+        <div className="modal-overlay" onClick={(e) => { if (e.target === e.currentTarget) setLogVitalsModalOpen(false); }}>
+          <div className="modal-panel" style={{ position: "relative" }}>
+            <button onClick={() => setLogVitalsModalOpen(false)} style={{ position: "absolute", top: "1.5rem", right: "1.5rem", background: "none", border: "none", cursor: "pointer", color: "#707070" }}><X size={20} /></button>
+            <p className="label-upper" style={{ marginBottom: "0.75rem" }}>Manual entry</p>
+            <h2 style={{ fontSize: "1.25rem", fontWeight: 700, color: "#fff", marginBottom: "2rem", letterSpacing: "-0.025em" }}>Log vitals</h2>
+            <form onSubmit={handleSaveVitals} style={{ display: "flex", flexDirection: "column", gap: "1.75rem" }}>
+              {[
+                { label: "Blood Pressure (mmHg)", value: manualBP, set: setManualBP, placeholder: "120/80", icon: <Heart size={14} /> },
+                { label: "Fasting Glucose (mg/dL)", value: manualGlucose, set: setManualGlucose, placeholder: "90", icon: <Droplets size={14} /> },
+                { label: "Body Weight (kg)", value: manualWeight, set: setManualWeight, placeholder: "65.0", icon: <Scale size={14} /> },
+              ].map((field) => (
+                <div key={field.label}>
+                  <label className="label-upper" style={{ display: "block", marginBottom: "0.5rem" }}>{field.label}</label>
+                  <div style={{ position: "relative" }}>
+                    <span style={{ position: "absolute", left: 0, top: "50%", transform: "translateY(-50%)", color: "#505050" }}>{field.icon}</span>
+                    <input
+                      type="text"
+                      className="input-editorial"
+                      placeholder={field.placeholder}
+                      value={field.value}
+                      onChange={(e) => field.set(e.target.value)}
+                      style={{ paddingLeft: "1.5rem" }}
+                    />
+                  </div>
                 </div>
-              </div>
-
-              <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">
-                  Fasting Glucose (mg/dL)
-                </label>
-                <div className="relative">
-                  <Droplets className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
-                  <input
-                    type="text"
-                    value={manualGlucose}
-                    onChange={(e) => setManualGlucose(e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-10 pr-4 py-2.5 text-sm text-white focus:outline-none focus:border-cyan-400"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">
-                  Body Weight (kg)
-                </label>
-                <div className="relative">
-                  <Scale className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
-                  <input
-                    type="text"
-                    value={manualWeight}
-                    onChange={(e) => setManualWeight(e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-10 pr-4 py-2.5 text-sm text-white focus:outline-none focus:border-cyan-400"
-                  />
-                </div>
-              </div>
-
-              <button
-                type="submit"
-                className="w-full py-3 rounded-xl font-semibold text-white bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-400 hover:to-teal-400 shadow-lg shadow-cyan-500/25 transition-all text-sm cursor-pointer mt-2"
-              >
-                Save to Medical History
+              ))}
+              <button type="submit" className="btn-primary" style={{ width: "100%", justifyContent: "center" }}>
+                Save to medical history
               </button>
             </form>
           </div>
         </div>
       )}
 
-      {/* Schedule Doctor Modal */}
+      {/* Schedule Modal */}
       {scheduleModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
-          <div className="relative w-full max-w-md bg-[#09101f] border border-cyan-500/30 rounded-3xl p-6 sm:p-8 shadow-2xl">
-            <button
-              onClick={() => setScheduleModalOpen(false)}
-              className="absolute top-5 right-5 p-1.5 text-slate-400 hover:text-white rounded-full hover:bg-slate-800"
-            >
-              <X className="w-5 h-5" />
-            </button>
-
-            <div className="flex items-center gap-3 mb-5">
-              <div className="p-2.5 rounded-xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/30">
-                <Calendar className="w-6 h-6" />
+        <div className="modal-overlay" onClick={(e) => { if (e.target === e.currentTarget) setScheduleModalOpen(false); }}>
+          <div className="modal-panel" style={{ position: "relative" }}>
+            <button onClick={() => setScheduleModalOpen(false)} style={{ position: "absolute", top: "1.5rem", right: "1.5rem", background: "none", border: "none", cursor: "pointer", color: "#707070" }}><X size={20} /></button>
+            <p className="label-upper" style={{ marginBottom: "0.75rem" }}>Quick book</p>
+            <h2 style={{ fontSize: "1.25rem", fontWeight: 700, color: "#fff", marginBottom: "2rem", letterSpacing: "-0.025em" }}>Select a specialist</h2>
+            {[
+              { name: "Dr. Sarah Chen, MD", spec: "Cardiologist", slot: "Today at 4:30 PM" },
+              { name: "Dr. Alexander Patel, MD", spec: "Endocrinologist", slot: "Tomorrow at 10:00 AM" },
+            ].map((doc) => (
+              <div key={doc.name} style={{ padding: "1.25rem 0", borderTop: "1px solid #1a1a1a" }}>
+                <p style={{ fontSize: "0.9375rem", fontWeight: 600, color: "#fff", marginBottom: "0.25rem" }}>{doc.name}</p>
+                <p className="body-sm">{doc.spec} · {doc.slot}</p>
               </div>
-              <div>
-                <h3 className="text-lg font-bold text-white">Book Specialist Session</h3>
-                <p className="text-xs text-slate-400">Board-certified physician network</p>
-              </div>
-            </div>
-
-            <div className="space-y-3">
-              <div className="p-3 bg-slate-900 rounded-xl border border-slate-800">
-                <p className="text-xs font-bold text-white">Dr. Sarah Chen, MD (Cardiologist)</p>
-                <p className="text-[11px] text-cyan-400">Next Slot: Today at 4:30 PM</p>
-              </div>
-              <div className="p-3 bg-slate-900 rounded-xl border border-slate-800">
-                <p className="text-xs font-bold text-white">Dr. Alexander Patel, MD (Endocrine &amp; Diet)</p>
-                <p className="text-[11px] text-cyan-400">Next Slot: Tomorrow at 10:00 AM</p>
-              </div>
-
+            ))}
+            <div style={{ borderTop: "1px solid #1a1a1a", paddingTop: "1.5rem", marginTop: "0.5rem" }}>
               <button
-                onClick={() => {
-                  setScheduleModalOpen(false);
-                  showToast("Telehealth consultation booked successfully! Calendar invitation sent.");
-                }}
-                className="w-full py-3 rounded-xl font-semibold text-white bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-400 hover:to-teal-400 shadow-lg shadow-cyan-500/25 transition-all text-sm cursor-pointer mt-4"
+                onClick={() => { setScheduleModalOpen(false); showToast("Consultation booked. Calendar invite sent."); }}
+                className="btn-primary"
+                style={{ width: "100%", justifyContent: "center" }}
               >
-                Confirm Booking ($0 Copay)
+                Confirm booking ($0 copay)
               </button>
             </div>
           </div>
         </div>
       )}
 
-      {/* Global Footer */}
       <Footer />
     </div>
   );

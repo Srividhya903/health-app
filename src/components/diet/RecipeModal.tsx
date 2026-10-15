@@ -2,16 +2,7 @@
 
 import React, { useState } from "react";
 import { Meal } from "@/data/dietData";
-import {
-  X,
-  Clock,
-  CheckCircle2,
-  Sparkles,
-  ChefHat,
-  Utensils,
-  Copy,
-  Printer,
-} from "lucide-react";
+import { X, Clock, Check, Copy, Printer } from "lucide-react";
 
 interface RecipeModalProps {
   meal: Meal | null;
@@ -39,132 +30,210 @@ export default function RecipeModal({ meal, onClose }: RecipeModalProps) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200"
+      style={{
+        position: "fixed",
+        inset: 0,
+        zIndex: 50,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "1.5rem",
+        backgroundColor: "rgba(0, 0, 0, 0.85)",
+        backdropFilter: "blur(6px)",
+      }}
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
     >
-      <div className="relative w-full max-w-2xl bg-[#09101f] border border-cyan-500/30 rounded-3xl p-6 sm:p-8 shadow-2xl max-h-[90vh] overflow-y-auto">
+      <div
+        style={{
+          position: "relative",
+          width: "100%",
+          maxWidth: "680px",
+          background: "#080808",
+          border: "1px solid #202020",
+          padding: "2.5rem",
+          maxHeight: "90vh",
+          overflowY: "auto",
+        }}
+      >
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-5 right-5 p-1.5 text-slate-400 hover:text-white rounded-full hover:bg-slate-800 transition-colors"
+          style={{
+            position: "absolute",
+            top: "1.5rem",
+            right: "1.5rem",
+            background: "none",
+            border: "none",
+            color: "#707070",
+            cursor: "pointer",
+            padding: "0.25rem",
+          }}
+          aria-label="Close modal"
         >
-          <X className="w-5 h-5" />
+          <X size={18} />
         </button>
 
-        {/* Meal Header */}
-        <div className="flex items-start gap-4 mb-5">
-          <div className="w-12 h-12 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 shrink-0 mt-1">
-            <Utensils className="w-6 h-6" />
-          </div>
-          <div>
-            <div className="flex items-center gap-2 mb-1">
-              <span className="text-xs font-bold uppercase tracking-wider text-cyan-400 bg-cyan-950/80 px-2.5 py-0.5 rounded-full border border-cyan-500/30">
-                {meal.type} Recipe
-              </span>
-              <span className="text-xs text-slate-400 flex items-center gap-1">
-                <Clock className="w-3.5 h-3.5 text-cyan-400" /> {meal.prepTime}
-              </span>
-            </div>
-            <h3 className="text-xl sm:text-2xl font-bold text-white leading-snug">
-              {meal.title}
-            </h3>
-            <p className="text-xs sm:text-sm text-slate-300 mt-1 leading-relaxed">
-              {meal.description}
-            </p>
-          </div>
-        </div>
-
-        {/* Nutritional Pill Bar */}
-        <div className="grid grid-cols-4 gap-2 p-3 bg-slate-950/80 rounded-2xl border border-slate-800 text-center mb-6">
-          <div>
-            <span className="text-[10px] text-slate-400 block font-medium">Calories</span>
-            <span className="text-base font-extrabold text-white">{meal.calories} kcal</span>
-          </div>
-          <div>
-            <span className="text-[10px] text-cyan-400 block font-medium">Protein</span>
-            <span className="text-base font-extrabold text-cyan-300">{meal.protein}g</span>
-          </div>
-          <div>
-            <span className="text-[10px] text-amber-400 block font-medium">Carbohydrates</span>
-            <span className="text-base font-extrabold text-amber-300">{meal.carbs}g</span>
-          </div>
-          <div>
-            <span className="text-[10px] text-emerald-400 block font-medium">Healthy Fats</span>
-            <span className="text-base font-extrabold text-emerald-300">{meal.fats}g</span>
-          </div>
-        </div>
-
-        {/* Clinical Superfood Tags */}
-        <div className="flex flex-wrap gap-2 mb-6">
-          {meal.superfoodTags.map((tag, idx) => (
-            <span
-              key={idx}
-              className="text-xs font-semibold px-2.5 py-1 rounded-full bg-cyan-950/60 text-cyan-300 border border-cyan-500/30 flex items-center gap-1"
-            >
-              <Sparkles className="w-3 h-3 text-cyan-400" />
-              {tag}
+        {/* Header */}
+        <div style={{ marginBottom: "2rem" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "0.5rem" }}>
+            <span className="label-upper">
+              {meal.type} Protocol
             </span>
-          ))}
-          <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-900 text-slate-300 border border-slate-800">
-            Glycemic Index: {meal.glycemicIndex}
-          </span>
-          <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-900 text-slate-300 border border-slate-800">
-            Fiber: {meal.fiber}g
-          </span>
+            <span style={{ color: "#303030" }}>—</span>
+            <span
+              style={{
+                fontSize: "0.75rem",
+                color: "#707070",
+                display: "flex",
+                alignItems: "center",
+                gap: "0.3rem",
+              }}
+            >
+              <Clock size={12} /> {meal.prepTime}
+            </span>
+          </div>
+
+          <h2
+            style={{
+              fontSize: "clamp(1.75rem, 3vw, 2.25rem)",
+              fontWeight: 900,
+              letterSpacing: "-0.03em",
+              color: "#fff",
+              lineHeight: 1.15,
+              marginBottom: "0.75rem",
+            }}
+          >
+            {meal.title}
+          </h2>
+
+          <p style={{ fontSize: "0.9375rem", color: "#a0a0a0", lineHeight: 1.6 }}>
+            {meal.description}
+          </p>
         </div>
 
-        {/* Clinical Mechanism Box */}
-        <div className="p-4 rounded-2xl bg-cyan-950/30 border border-cyan-500/20 mb-6">
-          <p className="text-xs font-bold uppercase tracking-wider text-cyan-300 mb-1 flex items-center gap-1.5">
-            <Sparkles className="w-3.5 h-3.5" /> Clinical Biometric Impact
+        {/* Nutritional Breakdown strip */}
+        <div
+          style={{
+            borderTop: "1px solid #1a1a1a",
+            borderBottom: "1px solid #1a1a1a",
+            padding: "1.25rem 0",
+            display: "grid",
+            gridTemplateColumns: "repeat(4, 1fr)",
+            gap: "1rem",
+            marginBottom: "2rem",
+          }}
+        >
+          <div>
+            <span style={{ fontSize: "0.6875rem", color: "#707070", display: "block", textTransform: "uppercase" }}>
+              Calories
+            </span>
+            <span style={{ fontSize: "1.25rem", fontWeight: 800, color: "#fff" }}>
+              {meal.calories}
+            </span>
+          </div>
+          <div>
+            <span style={{ fontSize: "0.6875rem", color: "#707070", display: "block", textTransform: "uppercase" }}>
+              Protein
+            </span>
+            <span style={{ fontSize: "1.25rem", fontWeight: 800, color: "#fff" }}>
+              {meal.protein}g
+            </span>
+          </div>
+          <div>
+            <span style={{ fontSize: "0.6875rem", color: "#707070", display: "block", textTransform: "uppercase" }}>
+              Carbs
+            </span>
+            <span style={{ fontSize: "1.25rem", fontWeight: 800, color: "#fff" }}>
+              {meal.carbs}g
+            </span>
+          </div>
+          <div>
+            <span style={{ fontSize: "0.6875rem", color: "#707070", display: "block", textTransform: "uppercase" }}>
+              Fats
+            </span>
+            <span style={{ fontSize: "1.25rem", fontWeight: 800, color: "#fff" }}>
+              {meal.fats}g
+            </span>
+          </div>
+        </div>
+
+        {/* Clinical Rationale */}
+        <div style={{ marginBottom: "2rem" }}>
+          <p className="label-upper" style={{ marginBottom: "0.5rem" }}>
+            Biometric Impact & Mechanism
           </p>
-          <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+          <p style={{ fontSize: "0.875rem", color: "#d0d0d0", lineHeight: 1.6 }}>
             {meal.clinicalBenefit}
           </p>
         </div>
 
         {/* Ingredients Checklist */}
-        <div className="mb-6">
-          <div className="flex items-center justify-between mb-3">
-            <h4 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
-              <span>Ingredients List</span>
-              <span className="text-xs font-normal text-slate-400">
-                ({Object.values(checkedIngredients).filter(Boolean).length} / {meal.ingredients.length} in pantry)
-              </span>
-            </h4>
+        <div style={{ marginBottom: "2.5rem" }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "baseline",
+              marginBottom: "1rem",
+            }}
+          >
+            <p className="label-upper">
+              Ingredients ({Object.values(checkedIngredients).filter(Boolean).length}/{meal.ingredients.length} checked)
+            </p>
             <button
               onClick={copyIngredients}
-              className="text-xs font-medium text-cyan-400 hover:text-cyan-300 flex items-center gap-1"
+              style={{
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                fontSize: "0.75rem",
+                color: "#707070",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "0.3rem",
+              }}
             >
-              <Copy className="w-3.5 h-3.5" />
-              <span>{copied ? "Copied!" : "Copy List"}</span>
+              {copied ? <Check size={12} /> : <Copy size={12} />}
+              <span>{copied ? "Copied" : "Copy List"}</span>
             </button>
           </div>
 
-          <div className="space-y-2">
+          <div style={{ display: "flex", flexDirection: "column" }}>
             {meal.ingredients.map((ing, idx) => {
               const isChecked = checkedIngredients[idx];
               return (
                 <div
                   key={idx}
                   onClick={() => toggleIngredient(idx)}
-                  className={`p-2.5 rounded-xl border transition-all cursor-pointer flex items-center gap-3 text-xs sm:text-sm ${
-                    isChecked
-                      ? "bg-slate-900/60 border-slate-800 text-slate-400 line-through"
-                      : "bg-slate-950/80 border-slate-800/80 text-slate-200 hover:border-cyan-500/40"
-                  }`}
+                  style={{
+                    borderTop: "1px solid #141414",
+                    padding: "0.75rem 0",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "0.75rem",
+                    cursor: "pointer",
+                    fontSize: "0.875rem",
+                    color: isChecked ? "#505050" : "#d0d0d0",
+                    textDecoration: isChecked ? "line-through" : "none",
+                    transition: "color 0.15s ease",
+                  }}
                 >
-                  <div
-                    className={`w-4 h-4 rounded-md border flex items-center justify-center shrink-0 ${
-                      isChecked
-                        ? "bg-emerald-500 border-emerald-400 text-white"
-                        : "border-slate-600 bg-slate-900"
-                    }`}
+                  <span
+                    style={{
+                      width: "14px",
+                      height: "14px",
+                      border: isChecked ? "1px solid #fff" : "1px solid #404040",
+                      background: isChecked ? "#fff" : "transparent",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      flexShrink: 0,
+                    }}
                   >
-                    {isChecked && <CheckCircle2 className="w-3 h-3" />}
-                  </div>
+                    {isChecked && <span style={{ width: "6px", height: "6px", background: "#000" }} />}
+                  </span>
                   <span>{ing}</span>
                 </div>
               );
@@ -173,40 +242,72 @@ export default function RecipeModal({ meal, onClose }: RecipeModalProps) {
         </div>
 
         {/* Preparation Instructions */}
-        <div className="mb-6">
-          <h4 className="text-sm font-bold text-white uppercase tracking-wider mb-3 flex items-center gap-2">
-            <ChefHat className="w-4 h-4 text-cyan-400" />
-            <span>Step-by-Step Preparation</span>
-          </h4>
-          <ol className="space-y-3">
+        <div style={{ marginBottom: "2.5rem" }}>
+          <p className="label-upper" style={{ marginBottom: "1rem" }}>
+            Method
+          </p>
+          <div style={{ display: "flex", flexDirection: "column" }}>
             {meal.instructions.map((step, idx) => (
-              <li
+              <div
                 key={idx}
-                className="p-3 rounded-2xl bg-slate-950/60 border border-slate-800/80 flex items-start gap-3 text-xs sm:text-sm text-slate-300"
+                style={{
+                  borderTop: "1px solid #141414",
+                  padding: "1rem 0",
+                  display: "flex",
+                  gap: "1.25rem",
+                  alignItems: "flex-start",
+                }}
               >
-                <span className="w-6 h-6 rounded-full bg-cyan-500/20 text-cyan-400 font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">
-                  {idx + 1}
+                <span
+                  style={{
+                    fontSize: "0.875rem",
+                    fontWeight: 800,
+                    color: "#505050",
+                    lineHeight: 1.5,
+                  }}
+                >
+                  0{idx + 1}
                 </span>
-                <span className="leading-relaxed">{step}</span>
-              </li>
+                <p style={{ fontSize: "0.875rem", color: "#a0a0a0", lineHeight: 1.6 }}>
+                  {step}
+                </p>
+              </div>
             ))}
-          </ol>
+          </div>
         </div>
 
-        {/* Action Buttons */}
-        <div className="pt-4 border-t border-slate-800 flex items-center justify-end gap-3">
+        {/* Footer actions */}
+        <div
+          style={{
+            borderTop: "1px solid #1a1a1a",
+            paddingTop: "1.5rem",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
           <button
             onClick={() => window.print()}
-            className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-300 bg-slate-900 border border-slate-800 hover:border-slate-700 flex items-center gap-1.5 cursor-pointer"
+            style={{
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              fontSize: "0.8125rem",
+              color: "#707070",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "0.4rem",
+            }}
           >
-            <Printer className="w-3.5 h-3.5" />
-            <span>Print Recipe</span>
+            <Printer size={14} /> Print Protocol
           </button>
+
           <button
             onClick={onClose}
-            className="px-5 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-400 hover:to-teal-400 shadow-md cursor-pointer"
+            className="btn-mono-primary"
+            style={{ fontSize: "0.8125rem", padding: "0.6rem 1.5rem" }}
           >
-            Done
+            Close
           </button>
         </div>
       </div>
