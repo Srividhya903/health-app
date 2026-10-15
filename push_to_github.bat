@@ -1,18 +1,12 @@
 @echo off
-echo ==============================================================
-echo Pushing Complete AuraHealth AI (with src/app) to GitHub
-echo Repository: https://github.com/Srividhya903/health-app
-echo ==============================================================
+SET GIT="C:\Program Files\Git\bin\git.exe"
+
+%GIT% add -A
+%GIT% commit -m "chore: update README and finalize project for Vercel deployment"
+%GIT% push origin main
+
 echo.
-"C:\Program Files\Git\cmd\git.exe" push -u origin main --force
-echo.
-if %ERRORLEVEL% EQU 0 (
-    echo ==============================================================
-    echo [SUCCESS] Complete project with src/app pushed to GitHub!
-    echo Vercel will now automatically rebuild and deploy successfully.
-    echo ==============================================================
-) else (
-    echo [NOTICE] If prompted by Git Credential Manager, please sign in with your browser.
-)
-echo.
+echo ==========================================
+echo Push complete! Check GitHub for results.
+echo ==========================================
 pause
